@@ -10,7 +10,28 @@ import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [showDemo, setShowDemo] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
   const { toast } = useToast();
+
+  const handleCreateWebsite = () => {
+    setIsCreating(true);
+    setTimeout(() => {
+      setIsCreating(false);
+      toast({
+        title: '🎉 Ваш сайт создаётся!',
+        description: 'AI начал генерацию вашего сайта. Это займёт несколько секунд...',
+      });
+    }, 2000);
+  };
+
+  const handleWatchDemo = () => {
+    setShowDemo(true);
+    toast({
+      title: '▶️ Демо запущено',
+      description: 'Смотрите, как AI создаёт сайт в реальном времени!',
+    });
+  };
 
   const features = [
     {
@@ -53,32 +74,20 @@ const Index = () => {
 
   const plans = [
     {
-      name: 'Старт',
-      price: '990',
-      period: 'месяц',
-      description: 'Для личных проектов',
-      features: ['1 сайт', '5 страниц', 'Базовые шаблоны', 'Техподдержка'],
-      popular: false
-    },
-    {
-      name: 'Профи',
-      price: '2990',
-      period: 'месяц',
-      description: 'Для бизнеса',
-      features: ['5 сайтов', 'Безлимит страниц', 'Все шаблоны', 'Интеграции', 'SEO-оптимизация', 'Приоритетная поддержка'],
+      name: 'Бесплатный',
+      price: '0',
+      period: 'навсегда',
+      description: 'Для всех пользователей',
+      features: ['Безлимит сайтов', 'Безлимит страниц', 'Все шаблоны', 'AI-генерация', 'Все интеграции', 'SEO-оптимизация', 'Экспорт кода', 'Техподдержка'],
       popular: true
-    },
-    {
-      name: 'Агентство',
-      price: '9990',
-      period: 'месяц',
-      description: 'Для агентств',
-      features: ['Безлимит сайтов', 'Белый лейбл', 'API доступ', 'Кастомные интеграции', 'Персональный менеджер'],
-      popular: false
     }
   ];
 
   const faqs = [
+    {
+      question: 'Действительно ли это полностью бесплатно?',
+      answer: 'Да! Наш сервис на 100% бесплатный. Никаких скрытых платежей, подписок или ограничений. Мы верим в открытый доступ к технологиям AI для всех.'
+    },
     {
       question: 'Как AI создаёт сайты?',
       answer: 'Наш AI анализирует ваше описание, изучает лучшие практики дизайна и UX, затем генерирует полноценный сайт с современным дизайном, адаптивной версткой и оптимизированным кодом.'
@@ -93,11 +102,7 @@ const Index = () => {
     },
     {
       question: 'Какие интеграции доступны?',
-      answer: 'Stripe/PayPal для оплаты, Google Analytics/Yandex.Metrika, Mailchimp/SendPulse для рассылок, AmoCRM/Bitrix24, чаты и многое другое.'
-    },
-    {
-      question: 'Как работает SEO-оптимизация?',
-      answer: 'AI автоматически настраивает метатеги, создаёт sitemap.xml, оптимизирует изображения, скорость загрузки и структуру для поисковиков.'
+      answer: 'Все! Stripe/PayPal для оплаты, Google Analytics/Yandex.Metrika, Mailchimp/SendPulse для рассылок, AmoCRM/Bitrix24, чаты и многое другое.'
     },
     {
       question: 'Могу ли я перенести сайт на свой хостинг?',
@@ -131,7 +136,7 @@ const Index = () => {
             <a href="#faq" className="text-foreground/80 hover:text-foreground transition">FAQ</a>
             <a href="#contact" className="text-foreground/80 hover:text-foreground transition">Контакты</a>
           </div>
-          <Button className="bg-primary hover:bg-primary/90">
+          <Button className="bg-primary hover:bg-primary/90" onClick={handleCreateWebsite}>
             Начать бесплатно
           </Button>
         </div>
@@ -141,7 +146,7 @@ const Index = () => {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
             <Badge className="mb-4 bg-primary/20 text-primary border-primary/30">
-              🚀 Новая эра веб-разработки
+              🎉 100% Бесплатно навсегда
             </Badge>
             <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-gradient">
               Создавайте сайты силой мысли
@@ -150,11 +155,16 @@ const Index = () => {
               AI-конструктор превращает ваши идеи в профессиональные сайты за минуты. Без кода. Без дизайнеров. Без ограничений.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="text-lg px-8 bg-primary hover:bg-primary/90">
+              <Button 
+                size="lg" 
+                className="text-lg px-8 bg-primary hover:bg-primary/90" 
+                onClick={handleCreateWebsite}
+                disabled={isCreating}
+              >
                 <Icon name="Sparkles" size={20} className="mr-2" />
-                Создать сайт бесплатно
+                {isCreating ? 'Создаём...' : 'Создать сайт бесплатно'}
               </Button>
-              <Button size="lg" variant="outline" className="text-lg px-8">
+              <Button size="lg" variant="outline" className="text-lg px-8" onClick={handleWatchDemo}>
                 <Icon name="Play" size={20} className="mr-2" />
                 Смотреть демо
               </Button>
@@ -165,19 +175,28 @@ const Index = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 blur-3xl animate-pulse-glow" />
             <Card className="relative overflow-hidden border-2 border-primary/20 animate-float">
               <div className="aspect-video bg-gradient-to-br from-card via-muted to-card p-8 flex items-center justify-center">
-                <div className="grid grid-cols-3 gap-4 w-full max-w-2xl">
-                  {[...Array(6)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="bg-background/50 backdrop-blur-sm rounded-lg p-4 border border-border/50 hover:border-primary/50 transition-all duration-300"
-                      style={{ animationDelay: `${i * 0.1}s` }}
-                    >
-                      <div className="h-3 bg-primary/30 rounded mb-2 w-3/4" />
-                      <div className="h-3 bg-muted rounded mb-2" />
-                      <div className="h-3 bg-muted rounded w-1/2" />
-                    </div>
-                  ))}
-                </div>
+                {showDemo ? (
+                  <div className="text-center">
+                    <Icon name="Sparkles" size={64} className="text-primary mx-auto mb-4 animate-pulse" />
+                    <p className="text-2xl font-bold text-foreground">AI создаёт ваш сайт...</p>
+                    <p className="text-muted-foreground mt-2">Это займёт всего несколько секунд</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-3 gap-4 w-full max-w-2xl">
+                    {[...Array(6)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="bg-background/50 backdrop-blur-sm rounded-lg p-4 border border-border/50 hover:border-primary/50 transition-all duration-300 cursor-pointer"
+                        style={{ animationDelay: `${i * 0.1}s` }}
+                        onClick={handleWatchDemo}
+                      >
+                        <div className="h-3 bg-primary/30 rounded mb-2 w-3/4" />
+                        <div className="h-3 bg-muted rounded mb-2" />
+                        <div className="h-3 bg-muted rounded w-1/2" />
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </Card>
           </div>
@@ -222,56 +241,50 @@ const Index = () => {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Выберите свой план
+              100% Бесплатный тариф
             </h2>
             <p className="text-xl text-muted-foreground">
-              Начните бесплатно, обновляйтесь по мере роста
+              Все возможности доступны бесплатно для всех пользователей
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="max-w-2xl mx-auto">
             {plans.map((plan, index) => (
               <Card
                 key={index}
-                className={`relative transition-all duration-300 hover:-translate-y-2 ${
-                  plan.popular
-                    ? 'border-2 border-primary shadow-2xl shadow-primary/20 scale-105'
-                    : 'border-border hover:border-primary/30'
-                }`}
+                className="relative transition-all duration-300 hover:-translate-y-2 border-2 border-primary shadow-2xl shadow-primary/20"
               >
-                {plan.popular && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <Badge className="bg-primary text-primary-foreground">
-                      Популярный
-                    </Badge>
-                  </div>
-                )}
-                <CardHeader>
-                  <CardTitle className="text-2xl">{plan.name}</CardTitle>
-                  <CardDescription>{plan.description}</CardDescription>
-                  <div className="pt-4">
-                    <span className="text-5xl font-bold">{plan.price}₽</span>
-                    <span className="text-muted-foreground">/{plan.period}</span>
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                  <Badge className="bg-primary text-primary-foreground text-lg px-6 py-2">
+                    🎉 Навсегда бесплатно
+                  </Badge>
+                </div>
+                <CardHeader className="text-center">
+                  <CardTitle className="text-3xl">{plan.name}</CardTitle>
+                  <CardDescription className="text-lg">{plan.description}</CardDescription>
+                  <div className="pt-6">
+                    <span className="text-7xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">{plan.price}₽</span>
+                    <span className="text-xl text-muted-foreground block mt-2">{plan.period}</span>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-3 mb-6">
+                  <ul className="space-y-4 mb-8">
                     {plan.features.map((feature, fIndex) => (
-                      <li key={fIndex} className="flex items-center gap-2">
-                        <Icon name="Check" size={20} className="text-primary flex-shrink-0" />
-                        <span>{feature}</span>
+                      <li key={fIndex} className="flex items-center gap-3">
+                        <Icon name="Check" size={24} className="text-primary flex-shrink-0" />
+                        <span className="text-lg">{feature}</span>
                       </li>
                     ))}
                   </ul>
                   <Button
-                    className={`w-full ${
-                      plan.popular
-                        ? 'bg-primary hover:bg-primary/90'
-                        : 'bg-secondary hover:bg-secondary/90 text-secondary-foreground'
-                    }`}
-                    onClick={() => setSelectedPlan(plan.name)}
+                    className="w-full bg-primary hover:bg-primary/90 text-lg py-6"
+                    onClick={() => {
+                      setSelectedPlan(plan.name);
+                      handleCreateWebsite();
+                    }}
                   >
-                    {selectedPlan === plan.name ? 'Выбрано' : 'Выбрать план'}
+                    <Icon name="Rocket" size={24} className="mr-2" />
+                    {selectedPlan === plan.name ? 'Начать создавать!' : 'Начать бесплатно'}
                   </Button>
                 </CardContent>
               </Card>
@@ -366,13 +379,13 @@ const Index = () => {
               <span className="text-xl font-bold">AI Builder</span>
             </div>
             <div className="flex gap-6">
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" onClick={() => toast({ title: 'GitHub', description: 'Скоро добавим ссылку!' })}>
                 <Icon name="Github" size={20} />
               </Button>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" onClick={() => toast({ title: 'Twitter', description: 'Скоро добавим ссылку!' })}>
                 <Icon name="Twitter" size={20} />
               </Button>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" onClick={() => toast({ title: 'LinkedIn', description: 'Скоро добавим ссылку!' })}>
                 <Icon name="Linkedin" size={20} />
               </Button>
             </div>
